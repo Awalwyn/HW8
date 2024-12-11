@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   ADD YOUR NAME / SECTION NUMBER HERE
+ *   Avery Walwyn || Section 002
  *
  *   This java file contains the problem solutions of canFinish and
  *   numGroups methods.
@@ -47,7 +47,7 @@ class ProblemSolutions {
      * exam '1'.
      *
      * The method will return true if you can finish all certification exams.
-     * Otherwise, return false (e.g., meaning it is a cyclic or cycle graph).
+     * Otherwise, return false (e.g., meaning it is a cyclic or cycleFound graph).
      *
      *     Example 1:
      *     Input: numExams = 2, prerequisites = [[1,0]]
@@ -55,7 +55,7 @@ class ProblemSolutions {
      *     Explanation: There are a total of 2 exams to take.
      *     To take exam 1 you should have completed the
      *     certification of exam 0. So, it is possible (no
-     *     cyclic or cycle graph of prereqs).
+     *     cyclic or cycleFound graph of prereqs).
      *
      *
      *     Example 2:
@@ -65,7 +65,7 @@ class ProblemSolutions {
      *     To take exam 1 you should have completed the
      *     certification of exam 0, and to take exams 0 you
      *     should also have completed the certification of exam
-     *     1. So, it is impossible (it is a cycle graph).
+     *     1. So, it is impossible (it is a cycleFound graph).
      *
      * @param numExams          - number of exams, which will produce a graph of n nodes
      * @param prerequisites     - 2-dim array of directed edges.
@@ -81,9 +81,35 @@ class ProblemSolutions {
         ArrayList<Integer>[] adj = getAdjList(numExams, 
                                         prerequisites); 
 
-        // ADD YOUR CODE HERE - ADD YOUR NAME / SECTION AT TOP OF FILE
-        return false;
+       //array to hold visited status
+       int[] visited = new int[numNodes];
+       
+       //check for cycles
+       for (int i = 0; i < numNodes; i++) {
+        if (hasCycle(i, adj, visited)) {
+            return false;
+        }
+       }
+        return true;
 
+    }
+
+    private boolean hasCycle (int node, ArrayList<Integer>[] adj, int[]visited) {
+        if (visited[node] == 1) {
+            return true;
+        }
+        if (visited[node] == 2) {
+            return false;
+        }
+
+        visited[node] = 1;
+        for (int neighbor : adj[node]) {
+            if (hasCycle (neighbor, adj, visited)) {
+                return true;
+            }
+        }
+        visited[node] = 2;
+        return false;
     }
 
 
@@ -192,7 +218,30 @@ class ProblemSolutions {
 
         // YOUR CODE GOES HERE - you can add helper methods, you do not need
         // to put all code in this method.
-        return -1;
-    }
 
+        //track visited nodes
+        boolean[]visited = new boolean[numNodes];
+        int groups = 0;
+
+        for (int k = 0; k < numNodes; k++) {
+            if (!visited[k]) {
+                groups++;
+                depthFirst(k,graph,visited);
+            }
+        }
+
+        //
+        return groups;
+    }
+//method to perform depth first search 
+private void depthFirst(int node, Map<Integer, List<Integer>> graph, boolean[] visited) {
+    visited[node] = true;
+    if(graph.containsKey(node)) {
+        for (int neighbor : graph.get(node)) {
+            if (!visited[neighbor]) {
+                depthFirst(neighbor, graph, visited);
+            }
+        }
+    }
+}
 }

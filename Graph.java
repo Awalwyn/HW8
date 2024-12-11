@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Avery Walwyn || Section 002
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -105,6 +105,37 @@ public class Graph {
   public int findRoot() {
 
     // ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME/SECTION AT TOP OF FILE
-    return -1;
+    //array to track edges
+    int[] newEdges = new int[numVertices];
+
+    //loop through adjacent list
+    for (int i = 0; i < numVertices; i++) {
+      for (Integer holder : adjListArr[i]) {
+        newEdges[holder]++;
+      }
+    }
+
+    int root = -1;
+    boolean multiRoots = false;
+
+    for (int i = 0; i < numVertices; i++) {
+      if (newEdges[i] == 0) {
+        if (root == -1) {
+          root = i;
+        } else {
+          multiRoots = true;
+          break;
+        }
+      }
+    }
+    if(multiRoots) {
+      return -1;
+    }else if (root != -1) {
+      return vertexValues.get(root);
+      
+    }else {
+      return -1;
+    }
+    
   } 
 }
